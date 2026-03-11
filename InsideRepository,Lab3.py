@@ -20,9 +20,7 @@ trips_order = trips_group.orderBy(F.col("total trips").desc(), F.col("avg delay"
 top_delayed = trips_order.limit(20)
 top_delayed.show(top_delayed.count(), truncate=False)
 
-# Writing to Text: Formatting, Concatenation and Writing/Overwrite
-result = top_delayed.select(F.col("distance").cast("string"))
-result_concat = result.select(F.concat_ws(",", *result.columns).alias("one_col"))
-result_concat.write.mode("overwrite").text("results.txt")
+# Writing to Text: Write/Overwrite
+top_delayed.write.mode("overwrite").csv("output")
 
 spark.stop()
